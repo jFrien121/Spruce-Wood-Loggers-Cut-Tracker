@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 /**
  * BatchPersistence
@@ -14,10 +15,20 @@ namespace Spruce_Wood_Loggers_ERP
 
         public static void SaveBatch(Batch batch)
         {
-            using (var db = new AppDbContext())
+            try
             {
-                db.Batches.Add(batch);
-                db.SaveChanges();
+                using (var db = new AppDbContext())
+                {
+                    db.Batches.Add(batch);
+                    db.SaveChanges();
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Error saving to database: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Saving Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
     }

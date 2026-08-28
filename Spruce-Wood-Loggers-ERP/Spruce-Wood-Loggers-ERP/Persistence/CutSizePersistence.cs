@@ -4,6 +4,7 @@ using Spruce_Wood_Loggers_ERP.Database_Objects;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace Spruce_Wood_Loggers_ERP.Persistence
 {
@@ -13,10 +14,22 @@ namespace Spruce_Wood_Loggers_ERP.Persistence
         public static async Task<List<CutSize>> LoadCutSizes()
         {
             List<CutSize> cutSizes = new List<CutSize>();
-            using (var db = new AppDbContext())
+
+            try
             {
-                cutSizes = await db.CutSizes.ToListAsync();
+                using (var db = new AppDbContext())
+                {
+                    cutSizes = await db.CutSizes.ToListAsync();
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading grid size dimensions : {ex.Message}\n\nApplication may need to be restarted.",
+                    "Database Loading Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
             return cutSizes;
         }
     }

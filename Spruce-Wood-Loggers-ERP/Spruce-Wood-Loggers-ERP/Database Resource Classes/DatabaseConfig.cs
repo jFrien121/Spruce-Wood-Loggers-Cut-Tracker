@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace Spruce_Wood_Loggers_ERP
 {
@@ -13,7 +14,18 @@ namespace Spruce_Wood_Loggers_ERP
 
         public static string getConfigPath()
         {
-            return Environment.CurrentDirectory + @"\CutTrackerDBSettings.json";
+            try
+            {
+                return Environment.CurrentDirectory + @"\CutTrackerDBSettings.json";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error getting program directory: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Database Settings Path Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            return "";
         }
     }
 }

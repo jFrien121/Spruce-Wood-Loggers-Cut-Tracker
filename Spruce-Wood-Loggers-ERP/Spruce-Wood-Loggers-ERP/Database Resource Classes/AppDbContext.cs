@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Windows;
 
 /**
  * AppDbContext
@@ -24,35 +25,57 @@ namespace Spruce_Wood_Loggers_ERP
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            string json = File.ReadAllText(DatabaseConfig.getConfigPath());
+            try
+            {
+                string json = File.ReadAllText(DatabaseConfig.getConfigPath());
 
-            DatabaseConfig dbConfig = JsonSerializer.Deserialize<DatabaseConfig>(json)!;
-            options.UseNpgsql($"Host={dbConfig.ipAddress};Port={dbConfig.port};Database=Cut_Tracker_Database;" +
-                $"Username={dbConfig.username};Password={dbConfig.password}");
+                DatabaseConfig dbConfig = JsonSerializer.Deserialize<DatabaseConfig>(json)!;
+                options.UseNpgsql($"Host={dbConfig.ipAddress};Port={dbConfig.port};Database=Cut_Tracker_Database;" +
+                    $"Username={dbConfig.username};Password={dbConfig.password}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error configuring database: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Database Configuration Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Batch>()
-                .Property(x => x.timeProcessed)
-                .HasColumnType("timestamp without time zone");
+            try
+            {
 
-            // Ensure uniqueness for certain fields
-            modelBuilder.Entity<CutLength>()
-                .HasIndex(l => l.length)
-                .IsUnique();
+                modelBuilder.Entity<Batch>()
+                    .Property(x => x.timeProcessed)
+                    .HasColumnType("timestamp without time zone");
 
-            modelBuilder.Entity<CutSize>()
-                .HasIndex(s => new { s.thickness, s.width})
-                .IsUnique();
+                // Ensure uniqueness for certain fields
+                modelBuilder.Entity<CutLength>()
+                    .HasIndex(l => l.length)
+                    .IsUnique();
 
-            modelBuilder.Entity<StandardNumPieces>()
-                .HasIndex(s => s.numPieces)
-                .IsUnique();
+                modelBuilder.Entity<CutSize>()
+                    .HasIndex(s => new { s.thickness, s.width })
+                    .IsUnique();
 
-            modelBuilder.Entity<StandardSizeRelationship>()
-                .HasIndex(s => new { s.StandardNumPiecesId, s.CutSizeId })
-                .IsUnique();
+                modelBuilder.Entity<StandardNumPieces>()
+                    .HasIndex(s => s.numPieces)
+                    .IsUnique();
+
+                modelBuilder.Entity<StandardSizeRelationship>()
+                    .HasIndex(s => new { s.StandardNumPiecesId, s.CutSizeId })
+                    .IsUnique();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error configuring database model: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Database Model Configuration Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
     }
 }
