@@ -31,25 +31,54 @@ namespace Spruce_Wood_Loggers_ERP
 
         private void NumberPiecesClose_Button_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
-            this.Close();
+            try
+            {
+                DialogResult = false;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error closing Number of Pieces Window: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Window Closing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void SelectCustomNumber_Button_Click(object sender, RoutedEventArgs e)
         {
-            this.selectCustomNumber = true;
-            this.Close();
+            try
+            {
+                this.selectCustomNumber = true;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error closing Custom Height Window: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Window Closing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void PieceNumberButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var textBlock = button!.Content as TextBlock;
+            try
+            {
+                var button = sender as Button;
+                var textBlock = button!.Content as TextBlock;
 
-            //int numPieces = int.Parse(textBlock!.Text);
-            this.numPieces = int.Parse(textBlock!.Text);
-            DialogResult = true;
-            this.Close();
+                this.numPieces = int.Parse(textBlock!.Text);
+                DialogResult = true;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error confirming standard number of pieces: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Number of Pieces Confirmation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         public int getNumPieces()

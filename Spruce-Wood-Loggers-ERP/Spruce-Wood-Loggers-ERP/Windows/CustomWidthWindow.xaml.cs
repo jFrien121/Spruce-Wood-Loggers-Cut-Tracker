@@ -26,18 +26,41 @@ namespace Spruce_Wood_Loggers_ERP
 
         private void PiecesWideClose_Button_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            try
+            {
+                this.DialogResult = false;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error closing Custom Width Window: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Window Closing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
         }
 
         private void WidthButton_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
-            var textBlock = button!.Content as TextBlock;
+            try
+            {
 
-            this.selectedWidth = int.Parse(textBlock!.Text);
-            this.DialogResult = true;
-            this.Close();
+
+                var button = sender as Button;
+                var textBlock = button!.Content as TextBlock;
+
+                this.selectedWidth = int.Parse(textBlock!.Text);
+                this.DialogResult = true;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error processing custom width: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Program Processing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         public int getSelectedWidth()

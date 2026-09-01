@@ -109,8 +109,8 @@ namespace Spruce_Wood_Loggers_ERP
                 {
                     for (int j = 0; j < cutSizes.Count; j++)
                     {
-                        double thickness = cutSizes.ElementAt(i).thickness;
-                        double width = cutSizes.ElementAt(i).width;
+                        double thickness = cutSizes.ElementAt(j).thickness;
+                        double width = cutSizes.ElementAt(j).width;
                         double length = cutLengths[i];
 
                         // Set button settings
@@ -243,26 +243,25 @@ namespace Spruce_Wood_Loggers_ERP
         }
 
         // Print a daily report
-        //private void Print_Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    PrintDialog printDialog = new PrintDialog();
+        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        {
+            PrintDialog printDialog = new PrintDialog();
 
-        //    bool? result = printDialog.ShowDialog();
+            bool? result = printDialog.ShowDialog();
 
-        //    if (result == true)
-        //    {
-        //        FlowDocument doc = new FlowDocument();
-        //        doc.Blocks.Add(new System.Windows.Documents.Paragraph(new Run("Hello World")));
+            if (result == true)
+            {
+                FlowDocument doc = new FlowDocument();
+                doc.Blocks.Add(new System.Windows.Documents.Paragraph(new Run("Hello World")));
 
-        //        printDialog.PrintDocument(((IDocumentPaginatorSource)doc).DocumentPaginator, "Printing FlowDocument");
-        //    }
-        //}
+                printDialog.PrintDocument(((IDocumentPaginatorSource)doc).DocumentPaginator, "Printing FlowDocument");
+            }
+        }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                throw new Exception("An unhelpful error occurred.");
                 var cutLengths = await CutLengthPersistence.LoadCutLengths();
                 var cutSizes = await CutSizePersistence.LoadCutSizes();
                 InitGrid(cutLengths, cutSizes);

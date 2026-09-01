@@ -21,7 +21,7 @@ namespace Spruce_Wood_Loggers_ERP.Persistence
             catch (Exception ex)
             {
                 MessageBox.Show($"Error connecting to the database: {ex.Message}\n\nApplication may need to be restarted.",
-                    "Database connecting Error",
+                    "Database Connection Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }

@@ -22,6 +22,7 @@ namespace Spruce_Wood_Loggers_ERP
         public DbSet<CutSize> CutSizes { get; set; }
         public DbSet<StandardNumPieces> StandardNumPieces { get; set; }
         public DbSet<StandardSizeRelationship> StandardSizeRelationships { get; set; }
+        public DbSet<LiftResult> LiftResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
@@ -68,6 +69,8 @@ namespace Spruce_Wood_Loggers_ERP
                 modelBuilder.Entity<StandardSizeRelationship>()
                     .HasIndex(s => new { s.StandardNumPiecesId, s.CutSizeId })
                     .IsUnique();
+
+                modelBuilder.Entity<LiftResult>().HasNoKey();
             }
             catch (Exception ex)
             {

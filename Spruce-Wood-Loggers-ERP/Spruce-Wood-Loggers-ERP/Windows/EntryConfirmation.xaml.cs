@@ -40,42 +40,72 @@ namespace Spruce_Wood_Loggers_ERP
 
         public EntryConfirmation(double thickness, double width, double length, int numPieces, int liftHeight, int liftWidth, bool customPieceNumber)
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            this.grade = Grade.UNGRADED;
-            this.thickness = thickness;
-            this.width = width;
-            this.length = length;
-            this.numPieces = numPieces;
-            this.liftHeight = liftHeight;
-            this.liftWidth = liftWidth;
-            this.customPieceNumber = customPieceNumber;
+                this.grade = Grade.UNGRADED;
+                this.thickness = thickness;
+                this.width = width;
+                this.length = length;
+                this.numPieces = numPieces;
+                this.liftHeight = liftHeight;
+                this.liftWidth = liftWidth;
+                this.customPieceNumber = customPieceNumber;
 
-            SetEntryText();
+                SetEntryText();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error initializing entry confirmation screen: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Window Initialization Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void SetEntryText()
         {
-            Entry_Description.Text = this.thickness + "\" x " + this.width + "\" x "
-                + this.length + "' x " + this.numPieces + " pieces ("
-                + GradeToString() + ")\n";
-
-            if (this.customPieceNumber)
+            try
             {
-                Entry_Description.Inlines.Add(new Run("Lift Height x Width: " + this.liftHeight
-                    + " x " + this.liftWidth)
-                { FontStyle = FontStyles.Italic });
+                Entry_Description.Text = this.thickness + "\" x " + this.width + "\" x "
+                    + this.length + "' x " + this.numPieces + " pieces ("
+                    + GradeToString() + ")\n";
+
+                if (this.customPieceNumber)
+                {
+                    Entry_Description.Inlines.Add(new Run("Lift Height x Width: " + this.liftHeight
+                        + " x " + this.liftWidth)
+                    { FontStyle = FontStyles.Italic });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error setting entry confirmation text: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Entry Text Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 
         private string GradeToString()
         {
-            switch (this.grade)
+            try
             {
-                case Grade.UNGRADED: return "Ungraded";
-                case Grade.ONE: return "#1";
-                case Grade.TWO: return "#2";
-                case Grade.THREE: return "#3";
+                switch (this.grade)
+                {
+                    case Grade.UNGRADED: return "Ungraded";
+                    case Grade.ONE: return "#1";
+                    case Grade.TWO: return "#2";
+                    case Grade.THREE: return "#3";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error converting grade to string: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Grade Conversion Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
 
             return "Ungraded";
@@ -84,57 +114,117 @@ namespace Spruce_Wood_Loggers_ERP
         // Cancel the entry
         private void Close_Button_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            try
+            {
+                this.DialogResult = false;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error closing Entry Confirmation Window: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Window Closing Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         // Save the entry to the database
         private void Confirm_Button_Click(object sender, RoutedEventArgs e)
         {
-            Batch currBatch = new Batch(DateTime.Now, this.thickness,
-                this.width, this.length, GradeToString(), this.numPieces);
-            BatchPersistence.SaveBatch(currBatch);
-            this.Close();
+            try
+            {
+                Batch currBatch = new Batch(DateTime.Now, this.thickness,
+                    this.width, this.length, GradeToString(), this.numPieces);
+                BatchPersistence.SaveBatch(currBatch);
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while confirming/saving the entry: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Entry Confirmation Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void Ungraded_Button_Click(object sender, RoutedEventArgs e)
         {
-            Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
-            Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            this.grade = Grade.UNGRADED;
-            SetEntryText();
+            try
+            {
+                Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
+                Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                this.grade = Grade.UNGRADED;
+                SetEntryText();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating grade: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Updating Grade Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void Grade1_Button_Click(object sender, RoutedEventArgs e)
         {
-            Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
-            Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            this.grade = Grade.ONE;
-            SetEntryText();
+            try
+            {
+                Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
+                Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                this.grade = Grade.ONE;
+                SetEntryText();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating grade: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Updating Grade Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
 
         private void Grade2_Button_Click(object sender, RoutedEventArgs e)
         {
-            Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
-            Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            this.grade = Grade.TWO;
-            SetEntryText();
-        }
+            try
+            {
+                Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
+                Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                this.grade = Grade.TWO;
+                SetEntryText();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating grade: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Updating Grade Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+}
 
         private void Grade3_Button_Click(object sender, RoutedEventArgs e)
         {
-            Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
-            Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
-            this.grade = Grade.THREE;
-            SetEntryText();
+            try
+            {
+                Grade3_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
+                Ungraded_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade1_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                Grade2_Button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedButton");
+                this.grade = Grade.THREE;
+                SetEntryText();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating grade: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Updating Grade Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
     }
 }
