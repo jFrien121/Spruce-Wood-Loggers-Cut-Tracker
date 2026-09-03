@@ -14,4 +14,5 @@ SELECT thickness
 FROM "Bundles"
 WHERE "timeProcessed" > CURRENT_DATE::timestamp
 GROUP BY thickness, width, length
+ORDER BY length, thickness, width
 $$;

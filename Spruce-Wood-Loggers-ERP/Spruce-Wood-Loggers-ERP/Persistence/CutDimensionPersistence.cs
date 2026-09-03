@@ -30,6 +30,8 @@ namespace Spruce_Wood_Loggers_ERP.Persistence
                     MessageBoxImage.Error);
             }
 
+            cutLengths.Sort((a, b) => a.CompareTo(b));
+
             return cutLengths;
         }
 
@@ -51,6 +53,14 @@ namespace Spruce_Wood_Loggers_ERP.Persistence
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
+
+            cutSizes.Sort((a, b) =>
+            {
+                int cmp = a.thickness.CompareTo(b.thickness); // primary sort
+                if (cmp == 0)
+                    cmp = a.width.CompareTo(b.width); // secondary sort
+                return cmp;
+            });
 
             return cutSizes;
         }

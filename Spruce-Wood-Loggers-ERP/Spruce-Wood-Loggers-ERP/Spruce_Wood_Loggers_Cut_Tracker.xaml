@@ -28,17 +28,20 @@
 						VerticalAlignment="Bottom"
 						IsHitTestVisible="False"/>-->
 
-			<Button x:Name="Print_Button"
+			<Button x:Name="Create_Report_Button"
 						Grid.Column="0" Grid.Row="0"
-						Content="Print"
-						Style="{StaticResource MaterialDesignRaisedButton}"
+						Style="{StaticResource MaterialDesignRaisedDarkButton}"
 						materialDesign:ButtonAssist.CornerRadius="5"
 						Margin="3px"
 						Padding="2px"
-						FontSize="6"
-						Height="20"
-						Width="20"
-						Click="Print_Button_Click"/>
+						Height="25"
+						Width="30"
+						Click="Print_Button_Click">
+				<TextBlock Text = "Create Report"
+							TextWrapping="Wrap"
+							FontSize="6"
+						   Foreground="White"/>
+			</Button>
 
 			<!-- Column and row header backgrounds -->
 			<Border Grid.Row="0" Grid.Column="1" 

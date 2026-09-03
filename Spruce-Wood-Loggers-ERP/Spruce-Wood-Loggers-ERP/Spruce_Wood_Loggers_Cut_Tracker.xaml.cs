@@ -4,6 +4,7 @@ using Spruce_Wood_Loggers_ERP.Database_Objects;
 using Spruce_Wood_Loggers_ERP.Persistence;
 using System.Diagnostics;
 using System.Diagnostics.SymbolStore;
+using System.IO;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
@@ -68,10 +69,12 @@ namespace Spruce_Wood_Loggers_ERP
                         Text = $"{cutSizes.ElementAt(i).thickness}\" x {cutSizes.ElementAt(i).width}\"",
                         FontSize = 10,
                         TextAlignment = TextAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Bottom,
                         Foreground = Brushes.White
                     };
 
                     header.Margin = new Thickness(0, 5, 0, 2);
+                    header.Padding = new Thickness(0, 0, 0, 4);
 
                     Grid.SetRow(header, 0);
                     Grid.SetColumn(header, i + 1);
@@ -94,7 +97,7 @@ namespace Spruce_Wood_Loggers_ERP
                         Foreground = Brushes.White
                     };
 
-                    header.Margin = new Thickness(4, 0, 3, 0);
+                    header.Margin = new Thickness(4, 0, 7, 0);
 
                     Grid.SetRow(header, i + 1);
                     Grid.SetColumn(header, 0);
@@ -247,14 +250,27 @@ namespace Spruce_Wood_Loggers_ERP
         {
             try
             {
+                string filePath = Environment.CurrentDirectory + @"\Daily-Reports\Report-" 
+                                    + DateTime.Now.ToString("yyyy-MM-dd-HH") + ".pdf";
                 var liftResults = await ReportPersistence.LoadLiftNumbersPerDimension();
-                ReportGenerator.CreatePdf(Environment.CurrentDirectory + @"\Daily-Reports\Report-" 
-                                            + DateTime.Now.ToString("yyyy-MM-dd-HH") + ".pdf", liftResults);
-
-                MessageBox.Show($"The Daily Report has been successfully created.",
-                    "Report Created Successfully",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var fbmResutls = await ReportPersistence.LoadTotalDailyFBM();
+                bool success = ReportGenerator.CreatePdf(filePath, liftResults, fbmResutls);
+                if (success)
+                {
+                    MessageBox.Show($"The Daily Report has been successfully created. " +
+                                    $"It can be found in the following folder:" +
+                                    $"\n\n{System.IO.Path.GetDirectoryName(filePath)}",
+                                       "Report Created Successfully",
+                                       MessageBoxButton.OK,
+                                       MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show($"The Daily Report may not have been successfully created.",
+                                       "Report Creation Waring",
+                                       MessageBoxButton.OK,
+                                       MessageBoxImage.Warning);
+                }
             }
             catch (Exception ex)
             {
@@ -263,18 +279,6 @@ namespace Spruce_Wood_Loggers_ERP
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
-
-            //PrintDialog printDialog = new PrintDialog();
-
-            //bool? result = printDialog.ShowDialog();
-
-            //if (result == true)
-            //{
-            //    FlowDocument doc = new FlowDocument();
-            //    doc.Blocks.Add(new System.Windows.Documents.Paragraph(new Run("Hello World")));
-
-            //    printDialog.PrintDocument(((IDocumentPaginatorSource)doc).DocumentPaginator, "Printing FlowDocument");
-            //}
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)

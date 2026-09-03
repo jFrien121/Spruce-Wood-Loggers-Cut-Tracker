@@ -39,5 +39,31 @@ namespace Spruce_Wood_Loggers_ERP.Persistence
 
             return cutLengths;
         }
+
+        public static async Task<double> LoadTotalDailyFBM()
+        {
+            double? fbmResult = 0;
+            try
+            {
+                using (var db = new AppDbContext())
+                {
+                    fbmResult = await db.Database.SqlQuery<double>($"SELECT Cut_Tracker_Daily_Total_FBM_Get() AS \"Value\"")
+                                                      .SingleOrDefaultAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading total daily FBM from database: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Database Loading Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
+            if (fbmResult == null)
+            {
+                return 0;
+            }
+            return fbmResult.Value;
+        }
     }
 }
