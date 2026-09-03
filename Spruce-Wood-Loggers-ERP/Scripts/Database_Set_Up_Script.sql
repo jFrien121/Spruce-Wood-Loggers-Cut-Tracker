@@ -1,4 +1,4 @@
-INSERT INTO "CutLengths" (length)
+INSERT INTO public."CutLengths" (length)
 VALUES
     (4),
     (4.5),
@@ -11,7 +11,7 @@ VALUES
     (16)
 ON CONFLICT (length) DO NOTHING;
 
-INSERT INTO "CutSizes" (thickness, width)
+INSERT INTO public."CutSizes" (thickness, width)
 VALUES
 	(1,4),
 	(1,6),
@@ -31,7 +31,7 @@ VALUES
 	(8,8)
 ON CONFLICT (thickness, width) DO NOTHING;
 
-INSERT INTO "StandardNumPieces" ("numPieces")
+INSERT INTO public."StandardNumPieces" ("numPieces")
 VALUES
 	(64),
 	(96),
@@ -43,16 +43,15 @@ VALUES
 	(360)
 ON CONFLICT ("numPieces") DO NOTHING;
 
-INSERT INTO "StandardSizeRelationships" ("StandardNumPiecesId", "CutSizeId")
+INSERT INTO public."StandardSizeRelationships" ("StandardNumPiecesId", "CutSizeId")
 VALUES
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 360), (SELECT id FROM "CutSizes" WHERE thickness = 1 AND width = 4)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 240), (SELECT id FROM "CutSizes" WHERE thickness = 1 AND width = 6)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 225), (SELECT id FROM "CutSizes" WHERE thickness = 2 AND width = 3)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 192), (SELECT id FROM "CutSizes" WHERE thickness = 2 AND width = 4)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 180), (SELECT id FROM "CutSizes" WHERE thickness = 2 AND width = 4)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 180), (SELECT id FROM "CutSizes" WHERE thickness = 3 AND width = 3)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 120), (SELECT id FROM "CutSizes" WHERE thickness = 2 AND width = 6)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 120), (SELECT id FROM "CutSizes" WHERE thickness = 3 AND width = 4)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 96), (SELECT id FROM "CutSizes" WHERE thickness = 4 AND width = 4)),
-	((SELECT id FROM "StandardNumPieces" WHERE "numPieces" = 64), (SELECT id FROM "CutSizes" WHERE thickness = 4 AND width = 6))
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 360), (SELECT id FROM public."CutSizes" WHERE thickness = 1 AND width = 4)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 240), (SELECT id FROM public."CutSizes" WHERE thickness = 1 AND width = 6)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 225), (SELECT id FROM public."CutSizes" WHERE thickness = 2 AND width = 3)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 192), (SELECT id FROM public."CutSizes" WHERE thickness = 2 AND width = 4)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 180), (SELECT id FROM public."CutSizes" WHERE thickness = 2 AND width = 4)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 180), (SELECT id FROM public."CutSizes" WHERE thickness = 3 AND width = 3)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 120), (SELECT id FROM public."CutSizes" WHERE thickness = 2 AND width = 6)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 96), (SELECT id FROM public."CutSizes" WHERE thickness = 4 AND width = 4)),
+	((SELECT id FROM public."StandardNumPieces" WHERE "numPieces" = 64), (SELECT id FROM public."CutSizes" WHERE thickness = 4 AND width = 6))
 ON CONFLICT ("StandardNumPiecesId", "CutSizeId") DO NOTHING;

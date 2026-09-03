@@ -36,7 +36,7 @@ namespace Spruce_Wood_Loggers_ERP
             {
                 InitializeComponent();
                 WindowState = WindowState.Maximized;
-                ResizeMode = ResizeMode.NoResize;
+                ResizeMode = ResizeMode.CanMinimize;
                 Topmost = true;
 
                 // Ensure database is created
@@ -235,35 +235,54 @@ namespace Spruce_Wood_Loggers_ERP
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error processing batch: {ex.Message}\n\nApplication may need to be restarted.",
-                    "Batch Processing Error",
+                MessageBox.Show($"Error processing bundle: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Bundle Processing Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
         }
 
         // Print a daily report
-        private void Print_Button_Click(object sender, RoutedEventArgs e)
+        private async void Print_Button_Click(object sender, RoutedEventArgs e)
         {
-            PrintDialog printDialog = new PrintDialog();
-
-            bool? result = printDialog.ShowDialog();
-
-            if (result == true)
+            try
             {
-                FlowDocument doc = new FlowDocument();
-                doc.Blocks.Add(new System.Windows.Documents.Paragraph(new Run("Hello World")));
+                var liftResults = await ReportPersistence.LoadLiftNumbersPerDimension();
+                ReportGenerator.CreatePdf(Environment.CurrentDirectory + @"\Daily-Reports\Report-" 
+                                            + DateTime.Now.ToString("yyyy-MM-dd-HH") + ".pdf", liftResults);
 
-                printDialog.PrintDocument(((IDocumentPaginatorSource)doc).DocumentPaginator, "Printing FlowDocument");
+                MessageBox.Show($"The Daily Report has been successfully created.",
+                    "Report Created Successfully",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading report info from database: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Database Loading Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+
+            //PrintDialog printDialog = new PrintDialog();
+
+            //bool? result = printDialog.ShowDialog();
+
+            //if (result == true)
+            //{
+            //    FlowDocument doc = new FlowDocument();
+            //    doc.Blocks.Add(new System.Windows.Documents.Paragraph(new Run("Hello World")));
+
+            //    printDialog.PrintDocument(((IDocumentPaginatorSource)doc).DocumentPaginator, "Printing FlowDocument");
+            //}
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                var cutLengths = await CutLengthPersistence.LoadCutLengths();
-                var cutSizes = await CutSizePersistence.LoadCutSizes();
+                var cutLengths = await CutDimensionPersistence.LoadCutLengths();
+                var cutSizes = await CutDimensionPersistence.LoadCutSizes();
                 InitGrid(cutLengths, cutSizes);
             }
             catch (Exception ex)

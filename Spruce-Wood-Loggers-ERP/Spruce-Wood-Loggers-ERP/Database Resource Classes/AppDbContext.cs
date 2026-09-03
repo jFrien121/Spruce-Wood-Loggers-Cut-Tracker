@@ -17,7 +17,7 @@ namespace Spruce_Wood_Loggers_ERP
 {
     class AppDbContext : DbContext
     {
-        public DbSet<Batch> Batches { get; set; }
+        public DbSet<Bundle> Bundles { get; set; }
         public DbSet<CutLength> CutLengths { get; set; }
         public DbSet<CutSize> CutSizes { get; set; }
         public DbSet<StandardNumPieces> StandardNumPieces { get; set; }
@@ -49,7 +49,7 @@ namespace Spruce_Wood_Loggers_ERP
             try
             {
 
-                modelBuilder.Entity<Batch>()
+                modelBuilder.Entity<Bundle>()
                     .Property(x => x.timeProcessed)
                     .HasColumnType("timestamp without time zone");
 

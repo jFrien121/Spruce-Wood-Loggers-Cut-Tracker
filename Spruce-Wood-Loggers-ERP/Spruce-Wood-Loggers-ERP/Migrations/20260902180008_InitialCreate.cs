@@ -13,7 +13,7 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Batches",
+                name: "Bundles",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -27,7 +27,7 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Batches", x => x.id);
+                    table.PrimaryKey("PK_Bundles", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,6 +55,19 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CutSizes", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LiftResults",
+                columns: table => new
+                {
+                    thickness = table.Column<double>(type: "double precision", nullable: false),
+                    width = table.Column<double>(type: "double precision", nullable: false),
+                    length = table.Column<double>(type: "double precision", nullable: false),
+                    numberOfLifts = table.Column<double>(type: "double precision", nullable: false)
+                },
+                constraints: table =>
+                {
                 });
 
             migrationBuilder.CreateTable(
@@ -130,10 +143,13 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Batches");
+                name: "Bundles");
 
             migrationBuilder.DropTable(
                 name: "CutLengths");
+
+            migrationBuilder.DropTable(
+                name: "LiftResults");
 
             migrationBuilder.DropTable(
                 name: "StandardSizeRelationships");

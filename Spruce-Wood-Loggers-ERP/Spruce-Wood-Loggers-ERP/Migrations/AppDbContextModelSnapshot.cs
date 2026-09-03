@@ -22,7 +22,7 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Spruce_Wood_Loggers_ERP.Batch", b =>
+            modelBuilder.Entity("Spruce_Wood_Loggers_ERP.Bundle", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Batches");
+                    b.ToTable("Bundles");
                 });
 
             modelBuilder.Entity("Spruce_Wood_Loggers_ERP.Database_Objects.CutLength", b =>
@@ -93,6 +93,23 @@ namespace Spruce_Wood_Loggers_ERP.Migrations
                         .IsUnique();
 
                     b.ToTable("CutSizes");
+                });
+
+            modelBuilder.Entity("Spruce_Wood_Loggers_ERP.Database_Objects.LiftResult", b =>
+                {
+                    b.Property<double>("length")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("numberOfLifts")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("thickness")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("width")
+                        .HasColumnType("double precision");
+
+                    b.ToTable("LiftResults");
                 });
 
             modelBuilder.Entity("Spruce_Wood_Loggers_ERP.Database_Objects.StandardNumPieces", b =>

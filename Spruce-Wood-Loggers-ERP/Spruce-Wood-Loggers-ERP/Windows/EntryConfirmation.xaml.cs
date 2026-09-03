@@ -133,9 +133,9 @@ namespace Spruce_Wood_Loggers_ERP
         {
             try
             {
-                Batch currBatch = new Batch(DateTime.Now, this.thickness,
+                Bundle currBundle = new Bundle(DateTime.Now, this.thickness,
                     this.width, this.length, GradeToString(), this.numPieces);
-                BatchPersistence.SaveBatch(currBatch);
+                BundlePersistence.SaveBundle(currBundle);
                 this.Close();
             }
             catch (Exception ex)

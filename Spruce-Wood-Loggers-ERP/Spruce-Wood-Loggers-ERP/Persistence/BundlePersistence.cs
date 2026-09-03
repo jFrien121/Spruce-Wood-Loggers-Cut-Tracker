@@ -4,22 +4,22 @@ using System.Text;
 using System.Windows;
 
 /**
- * BatchPersistence
- * Handles saving and retrieving batches from the database
+ * BundlePersistence
+ * Handles saving and retrieving bundles from the database
  */
 
 namespace Spruce_Wood_Loggers_ERP
 {
-    class BatchPersistence
+    class BundlePersistence
     {
 
-        public static void SaveBatch(Batch batch)
+        public static void SaveBundle(Bundle bundle)
         {
             try
             {
                 using (var db = new AppDbContext())
                 {
-                    db.Batches.Add(batch);
+                    db.Bundles.Add(bundle);
                     db.SaveChanges();
                 }
             }

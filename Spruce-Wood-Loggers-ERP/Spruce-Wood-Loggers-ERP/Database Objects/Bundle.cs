@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 
 /**
- * Batch
- * Holds information about a processed batch of logs
+ * Bundle
+ * Holds information about a processed bundle of logs
  */
 
 namespace Spruce_Wood_Loggers_ERP
 {
-    class Batch
+    class Bundle
     {
         public int id { get; set; } // primary key
         public DateTime timeProcessed { get; set; }
@@ -19,7 +19,7 @@ namespace Spruce_Wood_Loggers_ERP
         public string grade { get; set; }
         public int numPieces { get; set; }
 
-        public Batch(DateTime timeProcessed, double thickness, double width, double length, string grade, int numPieces)
+        public Bundle(DateTime timeProcessed, double thickness, double width, double length, string grade, int numPieces)
         {
             this.timeProcessed = timeProcessed;
             this.thickness = thickness;
@@ -30,7 +30,7 @@ namespace Spruce_Wood_Loggers_ERP
         }
 
         // Emptry constructor for database purposes
-        public Batch()
+        public Bundle()
         {
 
         }

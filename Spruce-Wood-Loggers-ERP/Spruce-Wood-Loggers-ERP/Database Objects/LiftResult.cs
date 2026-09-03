@@ -8,6 +8,7 @@ namespace Spruce_Wood_Loggers_ERP.Database_Objects
     {
         public double thickness { get; set; }
         public double width { get; set; }
+        public double length { get; set; }
         public double numberOfLifts { get; set; }
     }
 }
