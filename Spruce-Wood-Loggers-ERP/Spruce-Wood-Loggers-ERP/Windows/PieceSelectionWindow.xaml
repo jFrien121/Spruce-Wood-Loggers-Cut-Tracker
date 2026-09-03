@@ -7,7 +7,8 @@
 		xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
 		WindowStartupLocation="CenterOwner"
-        Title="PieceSelectionWindow" Height="300" Width="800">
+        Title="PieceSelectionWindow" Height="300" Width="800"
+		Loaded="Window_Loaded">
 
 	<WindowChrome.WindowChrome>
 		<WindowChrome
@@ -44,7 +45,7 @@
 				FontWeight="Bold" 
 				FontSize="30"></TextBlock>
 
-					<StackPanel
+					<StackPanel x:Name="Standard_Piece_Stack_Panel"
 				Margin="20"
 				Orientation="Horizontal"
 				VerticalAlignment="Center"

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Spruce_Wood_Loggers_ERP.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,12 +22,17 @@ namespace Spruce_Wood_Loggers_ERP
         private int numPieces;
         private bool selectCustomNumber;
 
-        public PieceSelectionWindow()
+        private double thickness;
+        private double width;
+
+        public PieceSelectionWindow(double thickness, double width)
         {
             InitializeComponent();
 
             this.selectCustomNumber = false;
             this.numPieces = 0;
+            this.thickness = thickness;
+            this.width = width;
         }
 
         private void NumberPiecesClose_Button_Click(object sender, RoutedEventArgs e)
@@ -89,6 +95,35 @@ namespace Spruce_Wood_Loggers_ERP
         public bool getSelectCustomNumber()
         {
             return selectCustomNumber;
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var standardNumPieces = await CutDimensionPersistence.LoadStandardNumPieces(this.thickness, this.width);
+                var standardNumPiecesStrings = standardNumPieces.Select(x => x.ToString());
+
+                foreach (var child in Standard_Piece_Stack_Panel.Children)
+                {
+                    if (child is Button button)
+                    {
+                        var textBlock = button.Content as TextBlock;
+
+                        if (standardNumPiecesStrings.Contains(textBlock!.Text))
+                        {
+                            button.Style = (Style)Application.Current.FindResource("MaterialDesignRaisedSecondaryButton");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error highlighting matching standard number of pieces: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Number of Pieces Highlighting Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ using static MaterialDesignThemes.Wpf.Theme;
 
 namespace Spruce_Wood_Loggers_ERP
 {
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -187,7 +188,7 @@ namespace Spruce_Wood_Loggers_ERP
                 int liftHeight = 0;
                 int liftWidth = 0;
 
-                var pieceSelection = new PieceSelectionWindow()
+                var pieceSelection = new PieceSelectionWindow(cutThickness, cutWidth)
                 {
                     Owner = this
                 };
@@ -246,11 +247,16 @@ namespace Spruce_Wood_Loggers_ERP
         }
 
         // Print a daily report
-        private async void Print_Button_Click(object sender, RoutedEventArgs e)
+        private async void Create_Report_Button_Click(object sender, RoutedEventArgs e)
+        {
+            await CreateReport();
+        }
+
+        private async Task CreateReport()
         {
             try
             {
-                string filePath = Environment.CurrentDirectory + @"\Daily-Reports\Report-" 
+                string filePath = Environment.CurrentDirectory + @"\Daily-Reports\Report-"
                                     + DateTime.Now.ToString("yyyy-MM-dd-HH") + ".pdf";
                 var liftResults = await ReportPersistence.LoadLiftNumbersPerDimension();
                 var fbmResutls = await ReportPersistence.LoadTotalDailyFBM();
@@ -288,6 +294,30 @@ namespace Spruce_Wood_Loggers_ERP
                 var cutLengths = await CutDimensionPersistence.LoadCutLengths();
                 var cutSizes = await CutDimensionPersistence.LoadCutSizes();
                 InitGrid(cutLengths, cutSizes);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading the window: {ex.Message}\n\nApplication may need to be restarted.",
+                    "Window Loading Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                
+                var createReport = MessageBox.Show($"Do you want to create a daily report before closing?",
+                    "Create Report?",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (createReport == MessageBoxResult.Yes)
+                {
+                    await CreateReport();
+                }
             }
             catch (Exception ex)
             {
